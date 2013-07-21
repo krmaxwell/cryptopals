@@ -11,11 +11,10 @@ UPPERLETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 LETTERS_AND_SPACE = UPPERLETTERS + UPPERLETTERS.lower() + ' \t\n'
 
 def loadDictionary():
-    dictionaryFile = open('dictionary.txt')
-    englishWords = {}
-    for word in dictionaryFile.read().split('\n'):
-        englishWords[word] = None
-    dictionaryFile.close()
+    englishWords = set()
+    with open('dictionary.txt','rb') as dictFile:
+        for word in dictFile.read().split('\n'):
+        englishWords.add(word)
     return englishWords
 
 ENGLISH_WORDS = loadDictionary()
