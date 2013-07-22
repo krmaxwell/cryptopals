@@ -2,7 +2,6 @@
 
 import sys
 import binascii
-#import detectEnglish
 
 words = set()
 
@@ -15,20 +14,15 @@ cipherdata = bytearray(binascii.unhexlify('%x' % ciphertext))
 
 def is_english(message):
 	word_t = 0.5			# expected fraction of words in message
-	letter_t = 0.8			# expected fraction of letters in message
 	wordcount = 0
 	wordalikes = 0
-	lettercount = 0
 
 	for word in message.split():
 		wordalikes += 1
 		if word.upper() in words:
 			wordcount += 1
 
-	for c in xrange(0,len(message)):
-		if message.upper()[c] in xrange(65,91):
-			lettercount += 1
-	return (float(wordcount) / wordalikes >= word_t) and (float(lettercount) / len(message) >= letter_t)
+	return float(wordcount) / wordalikes >= word_t
 	
 
 for key in xrange(0,256):
