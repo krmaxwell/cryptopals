@@ -20,5 +20,6 @@ def hamming_dist(s1,s2):
     if s: # they are in fact the same length
         for c in s:
             bits += sum(bit == '1' for bit in bin(ord(c))[2:]) 
+        return bits
     else:
         return False
