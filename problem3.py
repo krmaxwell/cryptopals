@@ -9,8 +9,7 @@ with open('dictionary.txt','rb') as wordfile:
 	for word in wordfile.read().split('\n'): 
 		words.add(word.upper())
 
-ciphertext = long(sys.argv[1],base=16)
-cipherdata = bytearray(binascii.unhexlify('%x' % ciphertext))
+cipherdata = sys.argv[1].decode('hex')
 
 def is_english(message):
 	word_t = 0.5			# expected fraction of words in message
@@ -26,11 +25,11 @@ def is_english(message):
 	
 
 for key in xrange(0,256):
-	cleardata=bytearray()
+	cleardata=''
 	for i in xrange(0,len(cipherdata)):
-		data = cipherdata[i] ^ key # ciphertext known to be XORed with single character
+		data = ord(cipherdata[i]) ^ key # ciphertext known to be XORed with single character
 		if data in xrange(32,128): # filter unprintable characters
-			cleardata.append(cipherdata[i] ^ key)
+			cleardata += chr(data)
 		else:
 			break
 	if (len(cleardata) == len(cipherdata)) and is_english(cleardata.decode()):
