@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 import sys
-import string
 import base64
 
 # first convert the string to actual binary data
@@ -17,3 +16,5 @@ hexdat = base64.b16decode(hex(data)[2:-1],casefold=True)
 output = base64.b64encode(hexdat)
 print output
 
+# go back the other way: turn base64 into hex
+print base64.b16encode(base64.b64decode(output))
