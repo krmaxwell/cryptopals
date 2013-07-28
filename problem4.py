@@ -21,18 +21,20 @@ def is_english(message):
 
 	return float(wordcount) / wordalikes >= word_t
 	
-with open('gistfile1.txt','rb') as cipherfile:
-	ciphertexts = set(line.rstrip() for line in cipherfile)
+with open('data4.txt','rb') as cipherfile:
+	ciphertexts = list(line.rstrip() for line in cipherfile)
 
 for ciphertext in ciphertexts:
-	cipherdata = binascii.unhexlify("%x" % long(ciphertext,base=16))
+	#print "Testing ",ciphertext
+	cipherdata = ciphertext.decode('hex')
 	for key in xrange(0,256):
-		cleardata=bytearray()
+		cleardata=''
 		for i in xrange(0,len(cipherdata)):
-			data = cipherdata[i] ^ key # ciphertext known to be XORed with single character
+			data = ord(cipherdata[i]) ^ key # ciphertext known to be XORed with single character
 			if data in xrange(32,128): # filter unprintable characters
-				cleardata.append(cipherdata[i] ^ key)
+				cleardata += chr(data)
 			else:
 				break
-		if (len(cleardata) == len(cipherdata)) and is_english(cleardata.decode()):
+		if (len(cleardata) == len(cipherdata)):
+		#if (len(cleardata) == len(cipherdata)) and is_english(cleardata.decode()):
 			print "%3d " % key, cipherdata, cleardata
