@@ -3,6 +3,9 @@
 import sys
 import base64
 
-dat1 = long(sys.argv[1],base=16)
-dat2 = long(sys.argv[2],base=16)
-print hex(dat1^dat2)[2:-1]
+def strxor(s1, s2):
+	return ''.join(chr(ord(a) ^ ord(b)) for a,b in zip(s1,s2))
+
+dat1 = sys.argv[1].decode('hex')
+dat2 = sys.argv[2].decode('hex')
+print strxor(dat1,dat2).encode('hex')
