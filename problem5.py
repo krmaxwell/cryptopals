@@ -1,8 +1,4 @@
-#!/usr/bin/python
-def strxor(s1, s2):
-    if len(s1)==len(s2):
-        return ''.join(chr(ord(a) ^ ord(b)) for a,b in zip(s1,s2))
-    return False
+from cryptokrm import *
 
 def xorstr(message, key):
     if len(key) < len(message):
@@ -10,7 +6,7 @@ def xorstr(message, key):
     else:
         ekey = key
 
-    return strxor(message,ekey)
+    return xor(message,ekey)
 
 s = "Burning 'em, if you ain't quick and nimble\nI go crazy when I hear a cymbal"
 
