@@ -14,7 +14,7 @@ def xorstr(message, key):
     return xor(message,ekey)
 
 def hamming_dist(s1,s2):
-    s = strxor(s1,s2)
+    s = xor(s1,s2)
     bits = 0
 
     if s: # they are in fact the same length
