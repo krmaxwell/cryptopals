@@ -4,7 +4,7 @@ import base64
 
 from cryptokrm import *
 
-with open('data6.txt','rb') as f:
+with open('data/data6.txt','rb') as f:
     message = f.read()
 
 # decode into ciphertext

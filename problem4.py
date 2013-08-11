@@ -25,7 +25,7 @@ def is_english(message):
     return float(wordcount) / wordalikes >= word_t
     
 if __name__ == "__main__":
-    with open('data4.txt','rb') as cipherfile:
+    with open('data/data4.txt','rb') as cipherfile:
         ciphertexts = list(line.rstrip() for line in cipherfile)
 
     for ciphertext in ciphertexts:
