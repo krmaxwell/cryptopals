@@ -11,7 +11,7 @@ def xorstr(message, key):
     else:
         ekey = key
 
-    return strxor(message,ekey)
+    return xor(message,ekey)
 
 def hamming_dist(s1,s2):
     s = strxor(s1,s2)

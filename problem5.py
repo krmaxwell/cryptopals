@@ -1,13 +1,5 @@
 from cryptokrm import *
 
-def xorstr(message, key):
-    if len(key) < len(message):
-        ekey = (key * (len(message)/len(key)+1))[:len(message)]
-    else:
-        ekey = key
-
-    return xor(message,ekey)
-
 s = "Burning 'em, if you ain't quick and nimble\nI go crazy when I hear a cymbal"
 
 hexdat = xorstr(s,"ICE").encode('hex')
