@@ -1,5 +1,8 @@
 *.py[cod]
 
+# will remove from directory later
+letterfreq.py
+
 # C extensions
 *.so
 

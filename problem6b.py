@@ -16,7 +16,7 @@ k = int(sys.argv[1])
 # now split cipher
 btext = [0]*k
 
-fullkey = ''
+#fullkey = ''
 
 for i in xrange(0,k):
     btext[i] = ctext[i::k]
@@ -28,7 +28,7 @@ for i in xrange(0,k):
                 cleardata += chr(data)
             else:
                 break
-        if len(cleardata) == len(btext[0]):
-            fullkey += chr(key)
+        if len(cleardata) == len(btext[i]):
+            print "candidate for keypos %d is %d" % (i, data)
 
-print fullkey
+#print fullkey.encode('hex')
