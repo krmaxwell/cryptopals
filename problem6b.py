@@ -20,15 +20,13 @@ btext = [0]*k
 
 for i in xrange(0,k):
     btext[i] = ctext[i::k]
+    similarity=dict()
     for key in xrange(0,256):
         cleardata = ''
         for j in xrange(0,len(btext[i])):
-            data = ord(btext[i][j]) ^ key
-            if data in xrange(32,127) or data == 10 or data == 13:
-                cleardata += chr(data)
-            else:
-                break
-        if len(cleardata) == len(btext[i]):
-            print "candidate for keypos %d is %d" % (i, data)
+            cleardata += chr(ord(btext[i][j]) ^ key)
+        similarity[key] = cos_sim(english.values(),frequency(cleardata).values())
+        if similarity[key] > 0.8:
+            print "candidate for keypos %2d is %3d sim %.4f" % (i, key, similarity[key])
 
 #print fullkey.encode('hex')
