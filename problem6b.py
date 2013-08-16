@@ -2,6 +2,7 @@
 
 import base64
 import sys
+import operator
 
 from cryptokrm import *
 
@@ -16,7 +17,7 @@ k = int(sys.argv[1])
 # now split cipher
 btext = [0]*k
 
-#fullkey = ''
+fullkey = ''
 
 for i in xrange(0,k):
     btext[i] = ctext[i::k]
@@ -26,7 +27,10 @@ for i in xrange(0,k):
         for j in xrange(0,len(btext[i])):
             cleardata += chr(ord(btext[i][j]) ^ key)
         similarity[key] = cos_sim(asciifreq.values(),frequency(cleardata).values())
-        if similarity[key] > 0.45:
-            print "candidate for keypos %2d is %3d sim %.4f" % (i, key, similarity[key])
+    best = max(similarity.iteritems(), key=operator.itemgetter(1))[0]
+    fullkey += chr(best)
+    
+print fullkey
+print fullkey.encode('hex')
 
-#print fullkey.encode('hex')
+print xorstr(ctext,fullkey)
