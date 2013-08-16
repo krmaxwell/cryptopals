@@ -25,8 +25,8 @@ for i in xrange(0,k):
         cleardata = ''
         for j in xrange(0,len(btext[i])):
             cleardata += chr(ord(btext[i][j]) ^ key)
-        similarity[key] = cos_sim(english.values(),frequency(cleardata).values())
-        if similarity[key] > 0.8:
+        similarity[key] = cos_sim(asciifreq.values(),frequency(cleardata).values())
+        if similarity[key] > 0.45:
             print "candidate for keypos %2d is %3d sim %.4f" % (i, key, similarity[key])
 
 #print fullkey.encode('hex')

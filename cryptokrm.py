@@ -1,110 +1,107 @@
 import numpy as np
-import re
 
 english = {'a' : 8.127, 'b' : 1.492, 'c' : 2.782, 'd' : 4.253, 'e' : 12.702, 'f' : 2.228, 'g' : 2.015, 'h' : 6.094, 'i' : 6.966, 'j' : 0.153, 'k' : 0.747, 'l' : 4.025, 'm' : 2.406, 'n' : 6.749, 'o' : 7.507, 'p' : 1.929, 'q' : 0.095, 'r' : 5.987, 's' : 6.327, 't' : 9.056, 'u' : 2.758, 'v' : 1.037, 'w' : 2.365, 'x' : 0.150, 'y' : 1.974, 'z' : 0.074} 
-# next values are taken from http://reusablesec.blogspot.com/2009/05/character-frequency-analysis-info.html
-asciifreq = {
-'a' :       7.52766,
-'e' :       7.0925,
-'o' :       5.17,
-'r' :       4.96032,
-'i' :       4.69732,
-'s' :       4.61079,
-'n' :       4.56899,
-'1' :       4.35053,
-'t' :       3.87388,
-'l' :       3.77728,
-'2' :       3.12312,
-'m' :       2.99913,
-'d' :       2.76401,
-'0' :       2.74381,
-'c' :       2.57276,
-'p' :       2.45578,
-'3' :       2.43339,
-'h' :       2.41319,
-'b' :       2.29145,
-'u' :       2.10191,
-'k' :       1.96828,
-'4' :       1.94265,
-'5' :       1.88577,
-'g' :       1.85331,
-'9' :       1.79558,
-'6' :       1.75647,
-'8' :       1.66225,
-'7' :       1.621,
-'y' :       1.52483,
-'f' :       1.2476,
-'w' :       1.24492,
-'j' :       0.836677,
-'v' :       0.833626,
-'z' :       0.632558,
-'x' :       0.573305,
-'q' :       0.346119,
-'A' :       0.130466,
-'S' :       0.108132,
-'E' :       0.0970865,
-'R' :       0.08476,
-'B' :       0.0806715,
-'T' :       0.0801223,
-'M' :       0.0782306,
-'L' :       0.0775594,
-'N' :       0.0748134,
-'P' :       0.073715,
-'O' :       0.0729217,
-'I' :       0.070908,
-'D' :       0.0698096,
-'C' :       0.0660872,
-'H' :       0.0544319,
-'G' :       0.0497332,
-'K' :       0.0460719,
-'F' :       0.0417393,
-'J' :       0.0363083,
-'U' :       0.0350268,
-'W' :       0.0320367,
-'.' :       0.0316706,
-'!' :       0.0306942,
-'Y' :       0.0255073,
-'*' :       0.0241648,
-'@' :       0.0238597,
-'V' :       0.0235546,
-'-' :       0.0197712,
-'Z' :       0.0170252,
-'Q' :       0.0147064,
-'X' :       0.0142182,
-'_' :       0.0122655,
-'$' :       0.00970255,
-'#' :       0.00854313,
-',' :       0.00323418,
-'/' :       0.00311214,
-'+' :       0.00231885,
-'?' :       0.00207476,
-';' :       0.00207476,
-'^' :       0.00195272,
-' ' :       0.00189169,
-'%' :       0.00170863,
-'~' :       0.00152556,
-'=' :       0.00140351,
-'&' :       0.00134249,
-'`' :       0.00115942,
-'\\' :       0.00115942,
-')' :       0.00115942,
-']' :       0.0010984,
-'[' :       0.0010984,
-':' :       0.000549201,
-'<' :       0.000427156,
-'(' :       0.000427156,
-'æ' :       0.000183067,
-'>' :       0.000183067,
-'"' :       0.000183067,
-'ü' :       0.000122045,
-'|' :       0.000122045,
-'{' :       0.000122045,
-'\'' :       0.000122045,
-'ö' :       6.10223e-05,
-'ä' :       6.10223e-05,
-'}' :       6.10223e-0 }
 
-nullfreq = {'a' : 0, 'b' : 0, 'c' : 0, 'd' : 0, 'e' : 0, 'f' : 0, 'g' : 0, 'h' : 0, 'i' : 0, 'j' : 0, 'k' : 0, 'l' : 0, 'm' : 0, 'n' : 0, 'o' : 0, 'p' : 0, 'q' : 0, 'r' : 0, 's' : 0, 't' : 0, 'u' : 0, 'v' : 0, 'w' : 0, 'x' : 0, 'y' : 0, 'z' : 0} 
+# initialize ascii frequency
+asciifreq = dict()
+for i in xrange(256):
+    asciifreq[i] = 0
+
+# next values are taken from http://reusablesec.blogspot.com/2009/05/character-frequency-analysis-info.html
+asciifreq[ord('a')] = 7.52766
+asciifreq[ord('e')] = 7.0925
+asciifreq[ord('o')] = 5.17
+asciifreq[ord('r')] = 4.96032
+asciifreq[ord('i')] = 4.69732
+asciifreq[ord('s')] = 4.61079
+asciifreq[ord('n')] = 4.56899
+asciifreq[ord('1')] = 4.35053
+asciifreq[ord('t')] = 3.87388
+asciifreq[ord('l')] = 3.77728
+asciifreq[ord('2')] = 3.12312
+asciifreq[ord('m')] = 2.99913
+asciifreq[ord('d')] = 2.76401
+asciifreq[ord('0')] = 2.74381
+asciifreq[ord('c')] = 2.57276
+asciifreq[ord('p')] = 2.45578
+asciifreq[ord('3')] = 2.43339
+asciifreq[ord('h')] = 2.41319
+asciifreq[ord('b')] = 2.29145
+asciifreq[ord('u')] = 2.10191
+asciifreq[ord('k')] = 1.96828
+asciifreq[ord('4')] = 1.94265
+asciifreq[ord('5')] = 1.88577
+asciifreq[ord('g')] = 1.85331
+asciifreq[ord('9')] = 1.79558
+asciifreq[ord('6')] = 1.75647
+asciifreq[ord('8')] = 1.66225
+asciifreq[ord('7')] = 1.621
+asciifreq[ord('y')] = 1.52483
+asciifreq[ord('f')] = 1.2476
+asciifreq[ord('w')] = 1.24492
+asciifreq[ord('j')] = 0.836677
+asciifreq[ord('v')] = 0.833626
+asciifreq[ord('z')] = 0.632558
+asciifreq[ord('x')] = 0.573305
+asciifreq[ord('q')] = 0.346119
+asciifreq[ord('A')] = 0.130466
+asciifreq[ord('S')] = 0.108132
+asciifreq[ord('E')] = 0.0970865
+asciifreq[ord('R')] = 0.08476
+asciifreq[ord('B')] = 0.0806715
+asciifreq[ord('T')] = 0.0801223
+asciifreq[ord('M')] = 0.0782306
+asciifreq[ord('L')] = 0.0775594
+asciifreq[ord('N')] = 0.0748134
+asciifreq[ord('P')] = 0.073715
+asciifreq[ord('O')] = 0.0729217
+asciifreq[ord('I')] = 0.070908
+asciifreq[ord('D')] = 0.0698096
+asciifreq[ord('C')] = 0.0660872
+asciifreq[ord('H')] = 0.0544319
+asciifreq[ord('G')] = 0.0497332
+asciifreq[ord('K')] = 0.0460719
+asciifreq[ord('F')] = 0.0417393
+asciifreq[ord('J')] = 0.0363083
+asciifreq[ord('U')] = 0.0350268
+asciifreq[ord('W')] = 0.0320367
+asciifreq[ord('.')] = 0.0316706
+asciifreq[ord('!')] = 0.0306942
+asciifreq[ord('Y')] = 0.0255073
+asciifreq[ord('*')] = 0.0241648
+asciifreq[ord('@')] = 0.0238597
+asciifreq[ord('V')] = 0.0235546
+asciifreq[ord('-')] = 0.0197712
+asciifreq[ord('Z')] = 0.0170252
+asciifreq[ord('Q')] = 0.0147064
+asciifreq[ord('X')] = 0.0142182
+asciifreq[ord('_')] = 0.0122655
+asciifreq[ord('$')] = 0.00970255
+asciifreq[ord('#')] = 0.00854313
+asciifreq[ord(',')] = 0.00323418
+asciifreq[ord('/')] = 0.00311214
+asciifreq[ord('+')] = 0.00231885
+asciifreq[ord('?')] = 0.00207476
+asciifreq[ord(';')] = 0.00207476
+asciifreq[ord('^')] = 0.00195272
+asciifreq[ord(' ')] = 0.00189169
+asciifreq[ord('%')] = 0.00170863
+asciifreq[ord('~')] = 0.00152556
+asciifreq[ord('=')] = 0.00140351
+asciifreq[ord('&')] = 0.00134249
+asciifreq[ord('`')] = 0.00115942
+asciifreq[ord('\\')] = 0.00115942
+asciifreq[ord(')')] = 0.00115942
+asciifreq[ord(']')] = 0.0010984
+asciifreq[ord('[')] = 0.0010984
+asciifreq[ord(':')] = 0.000549201
+asciifreq[ord('<')] = 0.000427156
+asciifreq[ord('(')] = 0.000427156
+asciifreq[ord('>')] = 0.000183067
+asciifreq[ord('"')] = 0.000183067
+asciifreq[ord('|')] = 0.000122045
+asciifreq[ord('{')] = 0.000122045
+asciifreq[ord('\'')] = 0.000122045
 
 def xor(s1, s2):
     if len(s1)==len(s2):
@@ -134,15 +131,19 @@ def cos_sim(v1, v2):
     return np.dot(v1, v2) / (np.sqrt(np.dot(v1, v1)) * np.sqrt(np.dot(v2, v2)))
 
 def frequency(message):
-    freq = nullfreq # prepopulate
+    # prepopulate to match asciifreq
+    freq = dict()
+    for i in xrange(256):
+        freq[i] = 0
 
-    data = re.sub('[^a-z]','',message.lower()) # all we care about are letters
-    for char in data:
-        freq[char] = data.count(char) 
+    # count actual frequency in message
+    for char in message:
+        freq[ord(char)] = message.count(char)
 
-    length = len(data) 
+    length = len(message)
     total = 0
 
+    # normalize to a ratio
     for x in freq: # iterate over keys
         if length > 0:
             freq[x] = (float(freq[x]) / length) * 100.0
