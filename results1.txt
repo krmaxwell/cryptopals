@@ -1,0 +1,305 @@
+1. See problem1.py. Correct result produced.
+
+$ python problem1.py 49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d
+
+SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t
+49276D206B696C6C696E6720796F757220627261696E206C696B65206120706F69736F6E6F7573206D757368726F6F6D
+
+// ------------------------------------------------------------
+
+2. See problem2.py. Correct result produced.
+
+$ python problem2.py 1c0111001f010100061a024b53535009181c 686974207468652062756c6c277320657965
+746865206b696420646f6e277420706c6179
+
+// ------------------------------------------------------------
+
+3. Key is 88, message is "Cooking MC's like a pound of bacon"
+
+// ------------------------------------------------------------
+
+4. Key is 53 for ciphertext 7b5a4215415d544115415d5015455447414c155c46155f4058455c5b523f which results in "Now that the party is jumping"
+
+// ------------------------------------------------------------
+
+5. See problem5.py. Correct result produced.
+
+$ python problem5.py
+0b3637272a2b2e63622c2e69692a23693a2a3c6324202d623d63343c2a26226324272765272a282b2f20430a652e2c652a3124333a653e2b2027630c692b20283165286326302e27282f
+True
+
+// ------------------------------------------------------------
+
+6. I broke this problem into two parts. First I determined that the keysize was 29 as follows:
+
+$ python problem6a.py 
+2 4.5
+3 3.33333333333
+4 7.5
+5 3.8
+6 3.5
+7 3.14285714286
+8 3.5
+9 2.88888888889
+10 3.7
+11 3.18181818182
+12 4.0
+13 2.92307692308
+14 3.14285714286
+15 3.4
+16 3.5
+17 3.47058823529
+18 3.16666666667
+19 3.15789473684
+20 3.5
+21 3.2380952381
+22 3.27272727273
+23 3.34782608696
+24 3.33333333333
+25 3.12
+26 3.61538461538
+27 3.48148148148
+28 2.89285714286
+29 2.65517241379
+30 2.9
+31 2.83870967742
+32 3.6875
+33 3.36363636364
+34 3.17647058824
+35 3.14285714286
+36 3.66666666667
+37 3.54054054054
+38 3.52631578947
+39 3.10256410256
+----------
+Probable keysize is 29 with dist 2.6552
+
+Based on this, I ran a second script with 29 as the input for the assumed keysize, which generated the key "Ter,inptor X: Bring the noibe". However, this generates an incorrect (albeit recognizeable and readable) result. Looking at positions 3, 6, and 27 (in the key and plaintext) we see deviations from normal English. This isn't surprising because those positions had fairly low cosine similarity to our ASCII character frequency standard. Looking at alternates for those characters, we find that close alternates for each of them (cosine similarity approaching the max of the options) produce more readable text, and indeed, when we use the key "Terminator X: Bring the noise":
+
+Position 0 best match is 54 with cossim 0.630
+Position 1 best match is 65 with cossim 0.514
+Position 2 best match is 72 with cossim 0.638
+Position 3 best match is 2c with cossim 0.420
+Alternate match 28 with cossim 0.399
+Alternate match 2c with cossim 0.420
+Alternate match 6d with cossim 0.377
+Alternate match 78 with cossim 0.309
+Alternate match 7c with cossim 0.399
+Position 4 best match is 69 with cossim 0.566
+Position 5 best match is 6e with cossim 0.652
+Position 6 best match is 70 with cossim 0.456
+Alternate match 20 with cossim 0.406
+Alternate match 24 with cossim 0.414
+Alternate match 33 with cossim 0.303
+Alternate match 60 with cossim 0.335
+Alternate match 61 with cossim 0.435
+Alternate match 66 with cossim 0.326
+Alternate match 67 with cossim 0.341
+Alternate match 6c with cossim 0.303
+Alternate match 70 with cossim 0.456
+Alternate match 71 with cossim 0.313
+Alternate match 74 with cossim 0.316
+Alternate match 76 with cossim 0.308
+Alternate match 77 with cossim 0.331
+Position 7 best match is 74 with cossim 0.531
+Position 8 best match is 6f with cossim 0.527
+Position 9 best match is 72 with cossim 0.579
+Position a best match is 20 with cossim 0.498
+Position b best match is 58 with cossim 0.696
+Position c best match is 3a with cossim 0.474
+Position d best match is 20 with cossim 0.480
+Position e best match is 42 with cossim 0.567
+Position f best match is 72 with cossim 0.500
+Position 10 best match is 69 with cossim 0.552
+Position 11 best match is 6e with cossim 0.556
+Position 12 best match is 67 with cossim 0.476
+Position 13 best match is 20 with cossim 0.599
+Position 14 best match is 74 with cossim 0.557
+Position 15 best match is 68 with cossim 0.569
+Position 16 best match is 65 with cossim 0.477
+Position 17 best match is 20 with cossim 0.498
+Position 18 best match is 6e with cossim 0.593
+Position 19 best match is 6f with cossim 0.560
+Position 1a best match is 69 with cossim 0.562
+Position 1b best match is 62 with cossim 0.467
+Alternate match 27 with cossim 0.302
+Alternate match 32 with cossim 0.424
+Alternate match 36 with cossim 0.409
+Alternate match 62 with cossim 0.467
+Alternate match 64 with cossim 0.340
+Alternate match 65 with cossim 0.328
+Alternate match 66 with cossim 0.366
+Alternate match 73 with cossim 0.404
+Alternate match 75 with cossim 0.312
+Position 1c best match is 65 with cossim 0.606
+Ter,inptor X: Bring the noibe
+5465722c696e70746f7220583a204272696e6720746865206e6f696265
+I'm back and I'm ringin' the bell 
+A rockin' on the mike while the fly girls yell 
+In ecstasy in the back of me 
+Well that's my DJ Deshay cuttin' all them Z's 
+Hittin' hard and the girlies goin' crazy 
+Vanilla's on the mike, man I'm not lazy. 
+
+I'm lettin' my drug kick in 
+It controls my mouth and I begin 
+To just let it flow, let my concepts go 
+My posse's to the side yellin', Go Vanilla Go! 
+
+Smooth 'cause that's the way I will be 
+And if you don't give a damn, then 
+Why you starin' at me 
+So get off 'cause I control the stage 
+There's no dissin' allowed 
+I'm in my own phase 
+The girlies sa y they love me and that is ok 
+And I can dance better than any kid n' play 
+
+Stage 2 -- Yea the one ya' wanna listen to 
+It's off my head so let the beat play through 
+So I can funk it up and make it sound good 
+1-2-3 Yo -- Knock on some wood 
+For good luck, I like my rhymes atrocious 
+Supercalafragilisticexpialidocious 
+I'm an effect and that you can bet 
+I can take a fly girl and make her wet. 
+
+I'm like Samson -- Samson to Delilah 
+There's no denyin', You can try to hang 
+But you'll keep tryin' to get my style 
+Over and over, practice makes perfect 
+But not if you're a loafer. 
+
+You'll get nowhere, no place, no time, no girls 
+Soon -- Oh my God, homebody, you probably eat 
+Spaghetti with a spoon! Come on and say it! 
+
+VIP. Vanilla Ice yep, yep, I'm comin' hard like a rhino 
+Intoxicating so you stagger like a wino 
+So punks stop trying and girl stop cryin' 
+Vanilla Ice is sellin' and you people are buyin' 
+'Cause why the freaks are jockin' like Crazy Glue 
+Movin' and groovin' trying to sing along 
+All through the ghetto groovin' this here song 
+Now you're amazed by the VIP posse. 
+
+Steppin' so hard like a German Nazi 
+Startled by the bases hittin' ground 
+There's no trippin' on mine, I'm just gettin' down 
+Sparkamatic, I'm hangin' tight like a fanatic 
+You trapped me once and I thought that 
+You might have it 
+So step down and lend me your ear 
+'89 in my time! You, '90 is my year. 
+
+You're weakenin' fast, YO! and I can tell it 
+Your body's gettin' hot, so, so I can smell it 
+So don't be mad and don't be sad 
+'Cause the lyrics belong to ICE, You can call me Dad 
+You're pitchin' a fit, so step back and endure 
+Let the witch doctor, Ice, do the dance to cure 
+So come up close and don't be square 
+You wanna battle me -- Anytime, anywhere 
+
+You thought that I was weak, Boy, you're dead wrong 
+So come on, everybody and sing this song 
+
+Say -- Play that funky music Say, go white boy, go white boy go 
+play that funky music Go white boy, go white boy, go 
+Lay down and boogie and play that funky music till you die. 
+
+Play that funky music Come on, Come on, let me hear 
+Play that funky music white boy you say it, say it 
+Play that funky music A little louder now 
+Play that funky music, white boy Come on, Come on, Come on 
+Play that funky music 
+
+// ------------------------------------------------------------
+
+7.
+
+I'm back and I'm ringin' the bell 
+A rockin' on the mike while the fly girls yell 
+In ecstasy in the back of me 
+Well that's my DJ Deshay cuttin' all them Z's 
+Hittin' hard and the girlies goin' crazy 
+Vanilla's on the mike, man I'm not lazy. 
+
+I'm lettin' my drug kick in 
+It controls my mouth and I begin 
+To just let it flow, let my concepts go 
+My posse's to the side yellin', Go Vanilla Go! 
+
+Smooth 'cause that's the way I will be 
+And if you don't give a damn, then 
+Why you starin' at me 
+So get off 'cause I control the stage 
+There's no dissin' allowed 
+I'm in my own phase 
+The girlies sa y they love me and that is ok 
+And I can dance better than any kid n' play 
+
+Stage 2 -- Yea the one ya' wanna listen to 
+It's off my head so let the beat play through 
+So I can funk it up and make it sound good 
+1-2-3 Yo -- Knock on some wood 
+For good luck, I like my rhymes atrocious 
+Supercalafragilisticexpialidocious 
+I'm an effect and that you can bet 
+I can take a fly girl and make her wet. 
+
+I'm like Samson -- Samson to Delilah 
+There's no denyin', You can try to hang 
+But you'll keep tryin' to get my style 
+Over and over, practice makes perfect 
+But not if you're a loafer. 
+
+You'll get nowhere, no place, no time, no girls 
+Soon -- Oh my God, homebody, you probably eat 
+Spaghetti with a spoon! Come on and say it! 
+
+VIP. Vanilla Ice yep, yep, I'm comin' hard like a rhino 
+Intoxicating so you stagger like a wino 
+So punks stop trying and girl stop cryin' 
+Vanilla Ice is sellin' and you people are buyin' 
+'Cause why the freaks are jockin' like Crazy Glue 
+Movin' and groovin' trying to sing along 
+All through the ghetto groovin' this here song 
+Now you're amazed by the VIP posse. 
+
+Steppin' so hard like a German Nazi 
+Startled by the bases hittin' ground 
+There's no trippin' on mine, I'm just gettin' down 
+Sparkamatic, I'm hangin' tight like a fanatic 
+You trapped me once and I thought that 
+You might have it 
+So step down and lend me your ear 
+'89 in my time! You, '90 is my year. 
+
+You're weakenin' fast, YO! and I can tell it 
+Your body's gettin' hot, so, so I can smell it 
+So don't be mad and don't be sad 
+'Cause the lyrics belong to ICE, You can call me Dad 
+You're pitchin' a fit, so step back and endure 
+Let the witch doctor, Ice, do the dance to cure 
+So come up close and don't be square 
+You wanna battle me -- Anytime, anywhere 
+
+You thought that I was weak, Boy, you're dead wrong 
+So come on, everybody and sing this song 
+
+Say -- Play that funky music Say, go white boy, go white boy go 
+play that funky music Go white boy, go white boy, go 
+Lay down and boogie and play that funky music till you die. 
+
+Play that funky music Come on, Come on, let me hear 
+Play that funky music white boy you say it, say it 
+Play that funky music A little louder now 
+Play that funky music, white boy Come on, Come on, Come on 
+Play that funky music 
+
+
+// ------------------------------------------------------------
+
+8. d880619740a8a19b7840a8a31c810a3d08649af70dc06f4fd5d2d69c744cd283e2dd052f6b641dbf9d11b0348542bb5708649af70dc06f4fd5d2d69c744cd2839475c9dfdbc1d46597949d9c7e82bf5a08649af70dc06f4fd5d2d69c744cd28397a93eab8d6aecd566489154789a6b0308649af70dc06f4fd5d2d69c744cd283d403180c98c8f6db1f2a3f9c4040deb0ab51b29933f2c123c58386b06fba186a
+
