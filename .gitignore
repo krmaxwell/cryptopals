@@ -36,5 +36,9 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
 # archives
 *.gz
+
+# virtual environment
+venv
