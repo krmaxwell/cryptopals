@@ -187,8 +187,8 @@ def cbcdecrypt(message, key):
     data = ''
 
     # TODO: why doesn't it handle the first block correctly?
-    for i in xrange(len(m) / len(key)):
-        block = m[i*len(key):(i+1)*len(key)]
+    for i in xrange(len(message) / len(key)):
+        block = message[i*len(key):(i+1)*len(key)]
         new_iv = block
         block = xor(cipher.decrypt(block),iv)
         iv = new_iv 
