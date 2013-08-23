@@ -1,6 +1,9 @@
-from Crypto.Cipher import AES
 import numpy as np
 import binascii
+import os
+import random
+
+from Crypto.Cipher import AES
 
 english = {'a' : 8.127, 'b' : 1.492, 'c' : 2.782, 'd' : 4.253, 'e' : 12.702, 'f' : 2.228, 'g' : 2.015, 'h' : 6.094, 'i' : 6.966, 'j' : 0.153, 'k' : 0.747, 'l' : 4.025, 'm' : 2.406, 'n' : 6.749, 'o' : 7.507, 'p' : 1.929, 'q' : 0.095, 'r' : 5.987, 's' : 6.327, 't' : 9.056, 'u' : 2.758, 'v' : 1.037, 'w' : 2.365, 'x' : 0.150, 'y' : 1.974, 'z' : 0.074} 
 
@@ -105,6 +108,12 @@ asciifreq[ord('|')] = 0.000122045
 asciifreq[ord('{')] = 0.000122045
 asciifreq[ord('\'')] = 0.000122045
 
+class KRM_Error(Exception):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
+
 def xor(s1, s2):
     if len(s1)==len(s2):
         return ''.join(chr(ord(a) ^ ord(b)) for a,b in zip(s1,s2))
@@ -162,8 +171,12 @@ def pkcs7padding(message, blocklength):
     pad = binascii.unhexlify('%02d' % padlength) * padlength
     return ''.join((message,pad))
 
-def cbcencrypt(message, key):
-    iv = binascii.unhexlify('%02d' % 0) * len(key)
+def cbcencrypt(message, key, iv=0):
+    if iv == 0:
+        iv = binascii.unhexlify('%02d' % 0) * len(key)
+    elif len(iv) != len(key):
+        raise KRM_Exception('IV and key lengths do not match')
+
     cipher = AES.new(key,AES.MODE_ECB)
     data = ''
     m = pkcs7padding(message, len(key))
@@ -195,3 +208,20 @@ def cbcdecrypt(message, key):
         data = ''.join((data, block))
 
     return data
+
+def encryption_oracle(message):
+    key = os.urandom(16)
+    modes = ['CBC','ECB']
+
+    mode = random.choice(modes)
+    prepend_data = os.urandom(random.randrange(5,10))
+    append_data = os.urandom(random.randrange(5,10))
+    data = ''.join((prepend_data,message,append_data))
+
+    if mode=='CBC':
+        iv = os.urandom(16)
+        return cbcencrypt(data, key, iv)
+    else:
+        cipher = AES.new(key,AES.MODE_ECB)
+        data = pkcs7padding(data,16)
+        return cipher.encrypt(data)
