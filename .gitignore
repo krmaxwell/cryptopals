@@ -42,3 +42,6 @@ nosetests.xml
 
 # virtual environment
 venv
+
+# swap files
+*.swp
