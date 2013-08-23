@@ -1,3 +1,4 @@
+from Crypto.Cipher import AES
 import numpy as np
 import binascii
 
@@ -158,5 +159,39 @@ def pkcs7padding(message, blocklength):
     padlength = blocklength - (len(message) % blocklength)
     if padlength == 0:
         return message
-    pad = binascii.unhexlify('%02d' % padlength) * pad
+    pad = binascii.unhexlify('%02d' % padlength) * padlength
     return ''.join((message,pad))
+
+def cbcencrypt(message, key):
+    iv = binascii.unhexlify('%02d' % 0) * len(key)
+    cipher = AES.new(key,AES.MODE_ECB)
+    data = ''
+    m = pkcs7padding(message, len(key))
+
+    if (len(m) % len(key)) == 0:
+        cycles = len(m) / len(key)
+    else:
+        cycles = len(m) / len(key) + 1
+
+    for i in xrange(cycles):
+        block = m[i*len(key):(i+1)*len(key)]
+        block = xor(block,iv)
+        iv = cipher.encrypt(block)
+        data = ''.join((data, iv))
+
+    return data
+
+def cbcdecrypt(message, key):
+    iv = binascii.unhexlify('%02d' % 0) * len(key)
+    cipher = AES.new(key,AES.MODE_ECB)
+    data = ''
+
+    # TODO: why doesn't it handle the first block correctly?
+    for i in xrange(len(m) / len(key)):
+        block = m[i*len(key):(i+1)*len(key)]
+        new_iv = block
+        block = xor(cipher.decrypt(block),iv)
+        iv = new_iv 
+        data = ''.join((data, block))
+
+    return data
