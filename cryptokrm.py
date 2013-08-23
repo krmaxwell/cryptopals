@@ -155,9 +155,8 @@ def frequency(message):
 
 
 def pkcs7padding(message, blocklength):
-    padlength = blocklength % len(message)
+    padlength = blocklength - (len(message) % blocklength)
     if padlength == 0:
         return message
-    pad = binascii.unhexlify('%02d' % padlength)
-    pad = pad * padlength
+    pad = binascii.unhexlify('%02d' % padlength) * pad
     return ''.join((message,pad))
