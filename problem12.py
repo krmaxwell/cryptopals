@@ -7,6 +7,7 @@ from cryptokrm import *
 secret_data = base64.b64decode('Um9sbGluJyBpbiBteSA1LjAKV2l0aCBteSByYWctdG9wIGRvd24gc28gbXkgaGFpciBjYW4gYmxvdwpUaGUgZ2lybGllcyBvbiBzdGFuZGJ5IHdhdmluZyBqdXN0IHRvIHNheSBoaQpEaWQgeW91IHN0b3A/IE5vLCBJIGp1c3QgZHJvdmUgYnkK')
 
 key = os.urandom(16)
+decrypt = ''
 
 def chunks(l, n):
     for i in xrange(0, len(l), n):
@@ -51,18 +52,20 @@ for i in xrange(64):
 print "Function uses ECB?", detect_ecb()
 
 # Step 3: Craft input block 1 byte short
-test_block = 'A' * (blocksize-1)
-test_out = test_func(test_block)[:blocksize]
+# Step 4: Match result from test input to all possible vals for that byte
+# because the oracle will end up padding it otherwise
+for i in xrange(4):
+    test_block = 'A' * (blocksize-(i+1)) + decrypt
+    print test_block, len(test_block)
+    test_out = test_func(test_block)[:blocksize]
 
-# Step 4: Dictionary of possible last bytes
-test_dict = dict()
-for c in xrange(256):
-    input_block = test_block + chr(c)
-    test_dict[input_block] = test_func(input_block)[:blocksize]
+    for c in xrange(256):
+        input_block = 'A' * (blocksize-(i+1)) + chr(c) + decrypt
+        print input_block, len(input_block)
+        test_result = test_func(input_block)[:blocksize]
+        if test_result == test_out:
+            print "Candidate character is %c - %03d" % (chr(c), c)
+            decrypt = chr(c) + decrypt
+            break
 
-# Step 5: Match output of step 3 to entry in step 5
-for block in test_dict:
-    if test_out == test_dict[block]:
-        print "Candidate character is %c - %03d" % (block[-1],ord(block[-1]))
-
-# Step 6: Loop to step 3 for next byte
+print decrypt
