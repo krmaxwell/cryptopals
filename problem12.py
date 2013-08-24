@@ -15,6 +15,15 @@ def test_func(message):
     return cipher.encrypt(data)
 
 # Step 1: Determine block size
+append_len=len(test_func(''))
+test_str = ''
+for i in xrange(64):
+    test_output = test_func(test_str)
+    if len(test_output) > append_len:
+        blocksize = len(test_output) - append_len
+        print "Block size is", blocksize
+        break
+    test_str += 'A'
 
 # Step 2: Detect ECB mode
 
@@ -22,4 +31,6 @@ def test_func(message):
 
 # Step 4: Dictionary of possible last bytes
 
-# Step 5: 
+# Step 5: Match output of step 3 to entry in step 5
+
+# Step 6: Loop to step 3 for next byte
