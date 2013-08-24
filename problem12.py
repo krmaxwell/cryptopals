@@ -51,9 +51,18 @@ for i in xrange(64):
 print "Function uses ECB?", detect_ecb()
 
 # Step 3: Craft input block 1 byte short
+test_block = 'A' * (blocksize-1)
+test_out = test_func(test_block)[:blocksize]
 
 # Step 4: Dictionary of possible last bytes
+test_dict = dict()
+for c in xrange(256):
+    input_block = test_block + chr(c)
+    test_dict[input_block] = test_func(input_block)[:blocksize]
 
 # Step 5: Match output of step 3 to entry in step 5
+for block in test_dict:
+    if test_out == test_dict[block]:
+        print "Candidate character is %c - %03d" % (block[-1],ord(block[-1]))
 
 # Step 6: Loop to step 3 for next byte
