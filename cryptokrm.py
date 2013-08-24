@@ -220,8 +220,10 @@ def encryption_oracle(message):
 
     if mode=='CBC':
         iv = os.urandom(16)
+        # cbcencrypt handles padding on its own
         return cbcencrypt(data, key, iv)
     else:
         cipher = AES.new(key,AES.MODE_ECB)
+        # PyCrypto leaves that up to you
         data = pkcs7padding(data,16)
         return cipher.encrypt(data)

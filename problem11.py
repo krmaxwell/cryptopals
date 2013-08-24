@@ -28,6 +28,7 @@ for text in data:
     for block in tempdict:
         if tempdict[block] > 1:
             flag = True
+    print text
     if flag:
         print "ECB"
     else:
