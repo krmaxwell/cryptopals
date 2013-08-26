@@ -53,13 +53,15 @@ print "Function uses ECB?", detect_ecb()
 
 # Step 3: Craft input block 1 byte short
 # Step 4: Match result from test input to all possible vals for that byte
-for i in xrange(15):
+for i in xrange(20):
+    index = i % blocksize
     for c in xrange(256):
-        guess_block = 'A' * (blocksize-(i+1)) + decrypt + chr(c)
+        # FIXME
+        guess_block = 'A' * (blocksize-(index+1)) + decrypt + chr(c)
         guess_result = oracle(guess_block)[:blocksize]
-        test_block = 'A' * (blocksize-(i+1))
-        test_result = oracle(test_block)[:blocksize]
-        #print guess_block.encode('hex'),len(guess_block),test_block.encode('hex'),len(test_block)
+        test_block = 'A' * (blocksize-(index+1))
+        test_result = oracle(test_block)[(i / blocksize)*blocksize:((i/blocksize)+1)*blocksize]
+        print guess_block.encode('hex'),len(guess_block),test_block.encode('hex'),len(test_block)
         if guess_result == test_result:
             sys.stdout.write(chr(c))
             decrypt = decrypt + chr(c)
