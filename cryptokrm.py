@@ -5,7 +5,7 @@ import random
 
 from Crypto.Cipher import AES
 
-english = {'a' : 8.127, 'b' : 1.492, 'c' : 2.782, 'd' : 4.253, 'e' : 12.702, 'f' : 2.228, 'g' : 2.015, 'h' : 6.094, 'i' : 6.966, 'j' : 0.153, 'k' : 0.747, 'l' : 4.025, 'm' : 2.406, 'n' : 6.749, 'o' : 7.507, 'p' : 1.929, 'q' : 0.095, 'r' : 5.987, 's' : 6.327, 't' : 9.056, 'u' : 2.758, 'v' : 1.037, 'w' : 2.365, 'x' : 0.150, 'y' : 1.974, 'z' : 0.074} 
+english = {'a': 8.127, 'b': 1.492, 'c': 2.782, 'd': 4.253, 'e': 12.702, 'f': 2.228, 'g': 2.015, 'h': 6.094, 'i': 6.966, 'j': 0.153, 'k': 0.747, 'l': 4.025, 'm': 2.406, 'n': 6.749, 'o': 7.507, 'p': 1.929, 'q': 0.095, 'r': 5.987, 's': 6.327, 't': 9.056, 'u': 2.758, 'v': 1.037, 'w': 2.365, 'x': 0.150, 'y': 1.974, 'z': 0.074}
 
 # initialize ascii frequency
 asciifreq = dict()
@@ -108,16 +108,20 @@ asciifreq[ord('|')] = 0.000122045
 asciifreq[ord('{')] = 0.000122045
 asciifreq[ord('\'')] = 0.000122045
 
+
 class KRM_Error(Exception):
     def __init__(self, value):
         self.value = value
+
     def __str__(self):
         return repr(self.value)
 
+
 def xor(s1, s2):
-    if len(s1)==len(s2):
-        return ''.join(chr(ord(a) ^ ord(b)) for a,b in zip(s1,s2))
+    if len(s1) == len(s2):
+        return ''.join(chr(ord(a) ^ ord(b)) for a, b in zip(s1, s2))
     return False
+
 
 def xorstr(message, key):
     if len(key) < len(message):
@@ -125,21 +129,24 @@ def xorstr(message, key):
     else:
         ekey = key
 
-    return xor(message,ekey)
+    return xor(message, ekey)
 
-def hamming_dist(s1,s2):
-    s = xor(s1,s2)
+
+def hamming_dist(s1, s2):
+    s = xor(s1, s2)
     bits = 0
 
-    if s: # they are in fact the same length
+    if s:  # they are in fact the same length
         for c in s:
-            bits += sum(bit == '1' for bit in bin(ord(c))[2:]) 
+            bits += sum(bit == '1' for bit in bin(ord(c))[2:])
         return bits
     else:
         return False
 
-def cos_sim(v1, v2): 
+
+def cos_sim(v1, v2):
     return np.dot(v1, v2) / (np.sqrt(np.dot(v1, v1)) * np.sqrt(np.dot(v2, v2)))
+
 
 def frequency(message):
     # prepopulate to match asciifreq
@@ -155,7 +162,7 @@ def frequency(message):
     total = 0
 
     # normalize to a ratio
-    for x in freq: # iterate over keys
+    for x in freq:  # iterate over keys
         if length > 0:
             freq[x] = (float(freq[x]) / length) * 100.0
         else:
@@ -169,7 +176,8 @@ def pkcs7padding(message, blocklength):
     if padlength == 0:
         return message
     pad = binascii.unhexlify('%02d' % padlength) * padlength
-    return ''.join((message,pad))
+    return ''.join((message, pad))
+
 
 def cbcencrypt(message, key, iv=0):
     if iv == 0:
@@ -177,7 +185,7 @@ def cbcencrypt(message, key, iv=0):
     elif len(iv) != len(key):
         raise KRM_Exception('IV and key lengths do not match')
 
-    cipher = AES.new(key,AES.MODE_ECB)
+    cipher = AES.new(key, AES.MODE_ECB)
     data = ''
     m = pkcs7padding(message, len(key))
 
@@ -188,42 +196,44 @@ def cbcencrypt(message, key, iv=0):
 
     for i in xrange(cycles):
         block = m[i*len(key):(i+1)*len(key)]
-        block = xor(block,iv)
+        block = xor(block, iv)
         iv = cipher.encrypt(block)
         data = ''.join((data, iv))
 
     return data
 
+
 def cbcdecrypt(message, key):
     iv = binascii.unhexlify('%02d' % 0) * len(key)
-    cipher = AES.new(key,AES.MODE_ECB)
+    cipher = AES.new(key, AES.MODE_ECB)
     data = ''
 
     # TODO: why doesn't it handle the first block correctly?
     for i in xrange(len(message) / len(key)):
         block = message[i*len(key):(i+1)*len(key)]
         new_iv = block
-        block = xor(cipher.decrypt(block),iv)
-        iv = new_iv 
+        block = xor(cipher.decrypt(block), iv)
+        iv = new_iv
         data = ''.join((data, block))
 
     return data
 
+
 def encryption_oracle(message):
     key = os.urandom(16)
-    modes = ['CBC','ECB']
+    modes = ['CBC', 'ECB']
 
     mode = random.choice(modes)
-    prepend_data = os.urandom(random.randrange(5,10))
-    append_data = os.urandom(random.randrange(5,10))
-    data = ''.join((prepend_data,message,append_data))
+    prepend_data = os.urandom(random.randrange(5, 10))
+    append_data = os.urandom(random.randrange(5, 10))
+    data = ''.join((prepend_data, message, append_data))
 
-    if mode=='CBC':
+    if mode == 'CBC':
         iv = os.urandom(16)
         # cbcencrypt handles padding on its own
         return cbcencrypt(data, key, iv)
     else:
-        cipher = AES.new(key,AES.MODE_ECB)
+        cipher = AES.new(key, AES.MODE_ECB)
         # PyCrypto leaves that up to you
-        data = pkcs7padding(data,16)
+        data = pkcs7padding(data, 16)
         return cipher.encrypt(data)
