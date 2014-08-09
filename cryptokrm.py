@@ -219,11 +219,13 @@ def cbcdecrypt(message, key):
     return data
 
 
-def encryption_oracle(message):
+def encryption_oracle(message, debug=False):
     key = os.urandom(16)
     modes = ['CBC', 'ECB']
 
     mode = random.choice(modes)
+    if debug:
+        print mode
     prepend_data = os.urandom(random.randrange(5, 10))
     append_data = os.urandom(random.randrange(5, 10))
     data = ''.join((prepend_data, message, append_data))
