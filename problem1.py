@@ -7,7 +7,7 @@ import base64
 data = sys.argv[1].decode('hex')
 
 # hexdat is now a string containing the same bytes as data
-# we did this becase b64encode() is annoying about input types
+# we did this because b64encode() is annoying about input types
 output = base64.b64encode(data)
 print output
 
