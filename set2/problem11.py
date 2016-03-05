@@ -1,9 +1,10 @@
 from cryptokrm import *
 from collections import Counter
 
+
 def chunks(l, n):
     for i in xrange(0, len(l), n):
-        yield l[i:i+n]
+        yield l[i:i + n]
 
 data = []
 cipher_texts = []
@@ -16,7 +17,7 @@ print '----------------'
 
 # first break each ciphertext into blocks of 16 bytes (128 bits)
 for t in cipher_texts:
-    data.append(list(chunks(t,16)))
+    data.append(list(chunks(t, 16)))
 
 # now look for repeated blocks within each ciphertext
 for text in data:

@@ -13,7 +13,7 @@ cipher = AES.new(key, AES.MODE_ECB)
 
 def chunks(l, n):
     for i in xrange(0, len(l), n):
-        yield l[i:i+n]
+        yield l[i:i + n]
 
 
 def oracle(message):
@@ -57,11 +57,11 @@ def main():
     print "Function uses ECB?", detect_ecb()
 
     # Step 3: Craft input block 1 byte short
-    guess_block = 'A' * (blocksize-(index+1)) + decrypt + chr(c)
+    guess_block = 'A' * (blocksize - (index + 1)) + decrypt + chr(c)
     guess_result = oracle(guess_block)[:blocksize]
-    test_block = 'A' * (blocksize-(index+1))
-    test_result = oracle(test_block)[(i / blocksize)*blocksize:((i/blocksize)+1)*blocksize]
-    print guess_block.encode('hex'),len(guess_block),test_block.encode('hex'),len(test_block)
+    test_block = 'A' * (blocksize - (index + 1))
+    test_result = oracle(test_block)[(i / blocksize) * blocksize:((i / blocksize) + 1) * blocksize]
+    print guess_block.encode('hex'), len(guess_block), test_block.encode('hex'), len(test_block)
     if guess_result == test_result:
         sys.stdout.write(chr(c))
         decrypt = decrypt + chr(c)
